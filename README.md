@@ -131,13 +131,13 @@ The Awards table stores information about awards given to movies.
 
 ## Important Queries
 
-![Query Example](important queries/1.png)
+![Query Example](https://github.com/FurkanBaytak/PostgreSQL-Netflix-Scenario/blob/main/important%20queries/1.png)
 
 The `important queries` folder contains SQL scripts for various complex queries. These queries demonstrate how to retrieve specific information from the database, such as the highest-rated films, the directors with the most awards, and the customers who watch the most films in each genre.
 
 ## ER Diagram
 
-![ER Diagram](E-R Diagram.png)
+![ER Diagram](https://github.com/FurkanBaytak/PostgreSQL-Netflix-Scenario/blob/main/E-R%20Diagram.png)
 
 The ER diagram visualizes the database structure, showing the entities, attributes, and relationships between them.
 
