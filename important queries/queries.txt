@@ -1,0 +1,366 @@
+/*
+-- MOVIES table creation
+CREATE TABLE movies (
+    movieid SERIAL PRIMARY KEY,
+    title VARCHAR(108) NOT NULL,
+    ryear INTEGER NOT NULL,
+    mpaa_rating VARCHAR(10)
+);
+
+-- DIRECTORS table creation
+CREATE TABLE directors (
+    directorid SERIAL PRIMARY KEY,
+    director_first VARCHAR(25) NOT NULL,
+    director_last VARCHAR(60) NOT NULL
+);
+
+-- ACTORS table creation
+CREATE TABLE actors (
+    actorid SERIAL PRIMARY KEY,
+    a_name VARCHAR(25) NOT NULL,
+    a_fname VARCHAR(35) NOT NULL,
+    birthdate DATE NOT NULL,
+    gender CHAR(1) NOT NULL CHECK (gender IN ('M', 'F'))
+);
+
+-- GENRES table creation
+CREATE TABLE genres (
+    genrecode VARCHAR(3) PRIMARY KEY,
+    genrename VARCHAR(25) NOT NULL
+);
+
+-- STREAMING PLANS table creation
+CREATE TABLE strmplan (
+    strmplanid VARCHAR(4) PRIMARY KEY,
+    description VARCHAR(100) NOT NULL,
+    pricepermonth NUMERIC(5,2) NOT NULL
+);
+
+-- CUSTOMERS table creation
+CREATE TABLE customers (
+    custid SERIAL PRIMARY KEY,
+    cfname VARCHAR(25) NOT NULL,
+    clname VARCHAR(25) NOT NULL,
+    cemail VARCHAR(60) NOT NULL,
+    cpassword VARCHAR(15) NOT NULL,
+    cbirthmonth INTEGER NOT NULL,
+    cbirthday INTEGER NOT NULL,
+    phonenumber CHAR(10),
+    strmplanid VARCHAR(4),
+    FOREIGN KEY (strmplanid) REFERENCES strmplan(strmplanid)
+);
+
+-- AWARDS table creation
+CREATE TABLE awards (
+    awardid SERIAL PRIMARY KEY,
+    awardtitle VARCHAR(100) NOT NULL
+);
+
+-- MOVIES_DIRECTORS relational table creation
+CREATE TABLE movies_directors (
+    movieid INTEGER NOT NULL,
+    directorid INTEGER NOT NULL,
+    FOREIGN KEY (movieid) REFERENCES movies(movieid),
+    FOREIGN KEY (directorid) REFERENCES directors(directorid),
+    PRIMARY KEY (movieid, directorid)
+);
+
+-- MOVIES_ACTORS relational table creation
+CREATE TABLE movies_actors (
+    movieid INTEGER NOT NULL,
+    actorid INTEGER NOT NULL,
+    FOREIGN KEY (movieid) REFERENCES movies(movieid),
+    FOREIGN KEY (actorid) REFERENCES actors(actorid),
+    PRIMARY KEY (movieid, actorid)
+);
+
+-- MOVIES_GENRES relational table creation
+CREATE TABLE movies_genres (
+    movieid INTEGER NOT NULL,
+    genrecode VARCHAR(3) NOT NULL,
+    FOREIGN KEY (movieid) REFERENCES movies(movieid),
+    FOREIGN KEY (genrecode) REFERENCES genres(genrecode),
+    PRIMARY KEY (movieid, genrecode)
+);
+
+-- MOVIES_AWARDS relational table creation
+CREATE TABLE movies_awards (
+    movieid INTEGER NOT NULL,
+    awardid INTEGER NOT NULL,
+    FOREIGN KEY (movieid) REFERENCES movies(movieid),
+    FOREIGN KEY (awardid) REFERENCES awards(awardid),
+    PRIMARY KEY (movieid, awardid)
+);
+
+-- RATINGS100 table creation
+CREATE TABLE ratings100 (
+    ratingid SERIAL PRIMARY KEY,
+    movieid INTEGER NOT NULL,
+    rating NUMERIC(2,1) NOT NULL,
+    rdate DATE NOT NULL,
+    custid INTEGER NOT NULL,
+    FOREIGN KEY (movieid) REFERENCES movies(movieid),
+    FOREIGN KEY (custid) REFERENCES customers(custid)
+);
+*/
+
+/*
+-- Sample data insertion for MOVIES table
+INSERT INTO movies (title, ryear, mpaa_rating) VALUES
+('The Shawshank Redemption', 1994, 'R'),
+('The Godfather', 1972, 'R'),
+('The Dark Knight', 2008, 'PG-13'),
+('12 Angry Men', 1957, 'Not Rated'),
+('Schindler''s List', 1993, 'R'),
+('The Lord of the Rings: The Return of the King', 2003, 'PG-13'),
+('Pulp Fiction', 1994, 'R'),
+('The Good, the Bad and the Ugly', 1966, 'Not Rated'),
+('Fight Club', 1999, 'R'),
+('Forrest Gump', 1994, 'PG-13');
+
+-- Sample data insertion for DIRECTORS table
+INSERT INTO directors (director_first, director_last) VALUES
+('Frank', 'Darabont'),
+('Francis Ford', 'Coppola'),
+('Christopher', 'Nolan'),
+('Sidney', 'Lumet'),
+('Steven', 'Spielberg'),
+('Peter', 'Jackson'),
+('Quentin', 'Tarantino'),
+('Sergio', 'Leone'),
+('David', 'Fincher'),
+('Robert', 'Zemeckis');
+
+-- Sample data insertion for ACTORS table
+INSERT INTO actors (a_name, a_fname, birthdate, gender) VALUES
+('Robbins', 'Tim', '1958-10-16', 'M'),
+('Brando', 'Marlon', '1924-04-03', 'M'),
+('Ledger', 'Heath', '1979-04-04', 'M'),
+('Fonda', 'Henry', '1905-05-16', 'M'),
+('Neeson', 'Liam', '1952-06-07', 'M'),
+('Wood', 'Elijah', '1981-01-28', 'M'),
+('Travolta', 'John', '1954-02-18', 'M'),
+('Eastwood', 'Clint', '1930-05-31', 'M'),
+('Pitt', 'Brad', '1963-12-18', 'M'),
+('Hanks', 'Tom', '1956-07-09', 'M');
+
+-- Sample data insertion for GENRES table
+INSERT INTO genres (genrecode, genrename) VALUES
+('01', 'Drama'),
+('02', 'Crime'),
+('03', 'Action'),
+('04', 'Mystery'),
+('05', 'Biography'),
+('06', 'Adventure'),
+('07', 'Thriller'),
+('08', 'Western'),
+('09', 'Romance'),
+('10', 'Comedy');
+
+-- Sample data insertion for STRMPLAN table
+INSERT INTO strmplan (strmplanid, description, pricepermonth) VALUES
+('SP01', 'Basic Plan', 8.99),
+('SP02', 'Standard Plan', 12.99),
+('SP03', 'Premium Plan', 15.99),
+('SP04', 'Family Plan', 18.99),
+('SP05', 'Student Plan', 6.99),
+('SP06', 'Annual Basic Plan', 89.99),
+('SP07', 'Annual Standard Plan', 129.99),
+('SP08', 'Annual Premium Plan', 159.99),
+('SP09', '4K Streaming Plan', 19.99),
+('SP10', 'HD Streaming Plan', 13.99);
+
+-- Sample data insertion for CUSTOMERS table
+INSERT INTO customers (cfname, clname, cemail, cpassword, cbirthmonth, cbirthday, phonenumber, strmplanid) VALUES
+('John', 'Doe', 'johndoe@email.com', '123abc', 5, 15, '5551234567', 'SP01'),
+('Jane', 'Smith', 'janesmith@email.com', '99xyz', 8, 22, '5551234568', 'SP02'),
+('Emily', 'Johnson', 'emilyj@email.com', 'pass123', 12, 9, '5551233458', 'SP03'),
+('Michael', 'Brown', 'michaelb@email.com', 'qwerty', 7, 3, '5552534458', 'SP04'),
+('Chloe', 'Davis', 'chloed@email.com', 's3cr3t', 10, 30, '5551673168', 'SP05'),
+('Lucas', 'Miller', 'lucasm@email.com', 'password', 3, 24, '5551245628', 'SP06'),
+('Olivia', 'Garcia', 'oliviag@email.com', 'ilovecats', 6, 17, '5551265468', 'SP07'),
+('Ethan', 'Rodriguez', 'ethanr@email.com', '654321', 4, 8, '5551567428', 'SP08'),
+('Sophia', 'Martinez', 'sophiam@email.com', 'fluffy', 9, 29, '5551543265', 'SP09'),
+('Benjamin', 'Hernandez', 'benjaminh@email.com', 'benj1234', 11, 16, '5551234568', 'SP10');
+
+-- Sample data insertion for AWARDS table
+INSERT INTO awards (awardtitle) VALUES
+('Best Picture'),
+('Best Director'),
+('Best Actor'),
+('Best Actress'),
+('Best Supporting Actor'),
+('Best Supporting Actress'),
+('Best Original Screenplay'),
+('Best Adapted Screenplay'),
+('Best Cinematography'),
+('Best Original Score');
+
+-- Sample data insertion for MOVIES_DIRECTORS table
+INSERT INTO movies_directors (movieid, directorid) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);
+
+-- Sample data insertion for MOVIES_ACTORS table
+INSERT INTO movies_actors (movieid, actorid) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);
+
+-- Sample data insertion for MOVIES_GENRES table
+INSERT INTO movies_genres (movieid, genrecode) VALUES
+(1, '01'),
+(2, '02'),
+(3, '03'),
+(4, '04'),
+(5, '05'),
+(6, '06'),
+(7, '07'),
+(8, '08'),
+(9, '07'),
+(10, '10');
+
+-- Sample data insertion for MOVIES_AWARDS table
+INSERT INTO movies_awards (movieid, awardid) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10);
+
+-- Sample data insertion for RATINGS100 table
+INSERT INTO ratings100 (movieid, rating, rdate, custid) VALUES
+(1, 9.3, '2023-01-15', 11),
+(2, 9.2, '2023-02-19', 12),
+(3, 9.0, '2023-03-22', 13),
+(4, 8.9, '2023-04-18', 14),
+(5, 8.9, '2023-05-25', 15),
+(6, 8.9, '2023-06-30', 16),
+(7, 8.9, '2023-07-20', 17),
+(8, 8.8, '2023-08-15', 18),
+(9, 8.8, '2023-09-10', 19),
+(10, 8.8, '2023-10-05', 20);
+*/
+
+/*
+-- Find the highest rated films and their directors:
+
+SELECT m.title, d.director_first, d.director_last, r.rating
+FROM movies m
+JOIN movies_directors md ON m.movieid = md.movieid
+JOIN directors d ON md.directorid = d.directorid
+JOIN ratings100 r ON m.movieid = r.movieid
+ORDER BY r.rating DESC
+LIMIT 10;
+
+-- Her türde en yüksek puan alan filmi bulun:
+
+WITH RankedGenres AS (
+  SELECT mg.genrecode, m.title, r.rating, 
+         RANK() OVER (PARTITION BY mg.genrecode ORDER BY r.rating DESC) AS rank
+  FROM movies_genres mg
+  JOIN movies m ON mg.movieid = m.movieid
+  JOIN ratings100 r ON m.movieid = r.movieid
+)
+SELECT genrecode, title, rating
+FROM RankedGenres
+WHERE rank = 1;
+
+-- Finding the last film each customer watched:
+
+SELECT c.cfname, c.clname, m.title, MAX(r.rdate) AS last_watched
+FROM customers c
+JOIN ratings100 r ON c.custid = r.custid
+JOIN movies m ON r.movieid = m.movieid
+GROUP BY c.cfname, c.clname, m.title
+ORDER BY last_watched DESC;
+
+-- Find the average score of the films in which each actor appeared and rank the films with an average score higher than 8.0:
+
+SELECT a.a_fname, a.a_name, AVG(r.rating) AS average_rating
+FROM actors a
+JOIN movies_actors ma ON a.actorid = ma.actorid
+JOIN ratings100 r ON ma.movieid = r.movieid
+GROUP BY a.a_fname, a.a_name
+HAVING AVG(r.rating) > 8.0
+ORDER BY average_rating DESC;
+
+-- Finding the total number of awards won by a director's films:
+
+SELECT d.director_first, d.director_last, COUNT(aw.awardid) AS total_awards
+FROM directors d
+JOIN movies_directors md ON d.directorid = md.directorid
+JOIN movies_awards aw ON md.movieid = aw.movieid
+GROUP BY d.director_first, d.director_last
+ORDER BY total_awards DESC;
+
+-- Finding the genre with the most films released in a year:
+
+SELECT g.genrename, COUNT(m.movieid) AS movie_count
+FROM genres g
+JOIN movies_genres mg ON g.genrecode = mg.genrecode
+JOIN movies m ON mg.movieid = m.movieid
+WHERE m.ryear = 1994  -- örnek bir yıl
+GROUP BY g.genrename
+ORDER BY movie_count DESC
+LIMIT 1;
+
+-- For each genre, finding the customers who watch the most films in that genre:
+
+WITH GenreWatchCounts AS (
+  SELECT c.custid, mg.genrecode, COUNT(r.ratingid) AS watch_count
+  FROM customers c
+  JOIN ratings100 r ON c.custid = r.custid
+  JOIN movies_genres mg ON r.movieid = mg.movieid
+  GROUP BY c.custid, mg.genrecode
+)
+SELECT mg.genrename, c.cfname, c.clname, gwc.watch_count
+FROM GenreWatchCounts gwc
+JOIN genres mg ON gwc.genrecode = mg.genrecode
+JOIN customers c ON gwc.custid = c.custid
+ORDER BY mg.genrename, gwc.watch_count DESC;
+
+-- Finding a list of films that have won at least one award and the actors who played in these films:
+
+SELECT DISTINCT m.title, a.a_fname, a.a_name
+FROM movies m
+JOIN movies_awards ma ON m.movieid = ma.movieid
+JOIN movies_actors mac ON m.movieid = mac.movieid
+JOIN actors a ON mac.actorid = a.actorid;
+
+-- Find films that have won an award and have a score higher than 9:
+
+SELECT m.title, a.awardtitle, r.rating
+FROM movies m
+JOIN movies_awards ma ON m.movieid = ma.movieid
+JOIN awards a ON ma.awardid = a.awardid
+JOIN ratings100 r ON m.movieid = r.movieid
+WHERE r.rating > 9;
+
+-- Finding the total duration of the films watched by each customer (By default, I assume film durations of 120 minutes):
+
+SELECT c.cfname, c.clname, COUNT(r.ratingid) * 120 AS total_minutes_watched
+FROM customers c
+JOIN ratings100 r ON c.custid = r.custid
+GROUP BY c.cfname, c.clname;
+*/
